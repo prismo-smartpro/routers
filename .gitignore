@@ -1,0 +1,6 @@
+vendor/*
+index.php
+.idea/*
+.htaccess
+src/App.php
+src/Client.php

@@ -1,0 +1,14 @@
+{
+  "name": "prismo-smartpro/router",
+  "description": "Sistema de rotas Smart Technology",
+  "minimum-stability": "stable",
+  "license": "GPL-3.0-or-later",
+  "require": {
+    "php": ">=7.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "SmartPRO\\Technology\\": "src/"
+    }
+  }
+}
