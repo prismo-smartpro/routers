@@ -93,13 +93,14 @@ class Routers
         if (!empty($this->group)) {
             $name = "/{$this->group}{$name}";
         }
+        $name = rtrim($name, "/");
         preg_match_all('~{(.*?)}~', $name, $data);
         $replaceName = preg_replace('~{(.*?)}~', '([^/]+)', $name);
         $replaceName = "/^" . str_replace('/', '\/', $replaceName) . "$/";
         if (!is_callable($handler)) {
             $handler = explode(":", $handler);
-            $Controller = "\\" . $handler[0];
-            $Action = $handler[1];
+            $Controller = "\\" . $handler[0] ?? null;
+            $Action = $handler[1] ?? null;
         } else {
             $isCallable = $handler;
         }
