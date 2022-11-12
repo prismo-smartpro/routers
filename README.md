@@ -4,8 +4,8 @@ Sistema de rotas Smart Technology
 
 ## Instalação
 
-```
-
+```bash
+composer require prismo-smartpro/router
 ```
 
 ## .htaccess

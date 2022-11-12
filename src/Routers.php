@@ -2,14 +2,36 @@
 
 namespace SmartPRO\Technology;
 
+/**
+ *
+ */
 class Routers
 {
+    /**
+     * @var array
+     */
     private array $routers;
+    /**
+     * @var string|mixed
+     */
     private string $httpMethod;
+    /**
+     * @var string|null
+     */
     private ?string $namespace;
+    /**
+     * @var string|mixed
+     */
     private string $uri;
+    /**
+     * @var string
+     */
     private string $group;
+    /**
+     * @var int|null
+     */
     private ?int $error = null;
+
 
     const NOT_FOUND = 404;
     const NOT_IMPLEMENTED = 405;
@@ -20,26 +42,52 @@ class Routers
         $this->httpMethod = $_SERVER['REQUEST_METHOD'];
     }
 
+    /**
+     * @param $name
+     * @param $handler
+     * @return void
+     */
     public function delete($name, $handler)
     {
         $this->addRouter("DELETE", $name, $handler);
     }
 
+    /**
+     * @param $name
+     * @param $handler
+     * @return void
+     */
     public function put($name, $handler)
     {
         $this->addRouter("PUT", $name, $handler);
     }
 
+    /**
+     * @param $name
+     * @param $handler
+     * @return void
+     */
     public function get($name, $handler)
     {
         $this->addRouter("GET", $name, $handler);
     }
 
+    /**
+     * @param $name
+     * @param $handler
+     * @return void
+     */
     public function post($name, $handler)
     {
         $this->addRouter("POST", $name, $handler);
     }
 
+    /**
+     * @param $method
+     * @param $name
+     * @param $handler
+     * @return void
+     */
     private function addRouter($method, $name, $handler)
     {
         if (!empty($this->group)) {
@@ -65,6 +113,9 @@ class Routers
         ];
     }
 
+    /**
+     * @return void
+     */
     public function dispatch()
     {
         if (!empty($this->routers[$this->httpMethod])) {
@@ -103,16 +154,27 @@ class Routers
         }
     }
 
+    /**
+     * @param string $group
+     * @return void
+     */
     public function group(string $group): void
     {
         $this->group = $group;
     }
 
+    /**
+     * @param string|null $namespace
+     * @return void
+     */
     public function setNamespace(?string $namespace): void
     {
         $this->namespace = $namespace;
     }
 
+    /**
+     * @return int|null
+     */
     public function error(): ?int
     {
         return $this->error;
