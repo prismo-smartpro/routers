@@ -32,6 +32,8 @@ class Routers
      */
     private ?int $error = null;
 
+    protected ?array $route;
+
 
     const NOT_FOUND = 404;
     const NOT_IMPLEMENTED = 405;
@@ -90,10 +92,10 @@ class Routers
      */
     private function addRouter($method, $name, $handler)
     {
-        if (!empty($this->group)) {
-            $name = "/{$this->group}{$name}";
+        $name = empty($this->group) ? $name : "/{$this->group}{$name}";
+        if ($name != "/") {
+            $name = rtrim($name, "/");
         }
-        $name = rtrim($name, "/");
         preg_match_all('~{(.*?)}~', $name, $data);
         $replaceName = preg_replace('~{(.*?)}~', '([^/]+)', $name);
         $replaceName = "/^" . str_replace('/', '\/', $replaceName) . "$/";
@@ -120,34 +122,38 @@ class Routers
     public function dispatch()
     {
         if (!empty($this->routers[$this->httpMethod])) {
-            $offset = 0;
             foreach ($this->routers[$this->httpMethod] as $key => $value) {
-                $Action = $value['action'];
                 preg_match_all($key, $this->uri, $results, PREG_SET_ORDER);
                 if (!empty($results)) {
-                    if (!empty($value['isCallable'])) {
-                        $offset++;
-                        call_user_func($value['isCallable'], [], $this);
-                    } else {
-                        $offset++;
-                        unset($results[0][0]);
-                        $data = array_combine($value['data'], $results[0]);
-                        $className = $this->namespace . $value['handler'];
-                        if (class_exists($className)) {
-                            $Controller = new $className();
-                            if (method_exists($Controller, $Action)) {
-                                $Controller->$Action(["data" => $data ?? []]);
-                            } else {
-                                $this->error = self::NOT_IMPLEMENTED;
-                            }
-                        } else {
-                            $this->error = self::NOT_FOUND;
-                        }
-                    }
+                    unset($results[0][0]);
+                    $this->route = [
+                        "results" => $results,
+                        "values" => $value
+                    ];
                     break;
                 }
             }
-            if (empty($offset)) {
+
+            if (!empty($this->route['values'])) {
+                if (!empty($this->route['values']['isCallable'])
+                    and is_callable($this->route['values']['isCallable'])) {
+                    call_user_func($this->route['values']['isCallable'], [], $this);
+                } else {
+                    $Action = $this->route['values']['action'] ?? null;
+                    $data = array_combine($this->route['values']['data'], $this->route['results'][0]);
+                    $className = $this->namespace . $this->route['values']['handler'];
+                    if (class_exists($className)) {
+                        $Controller = new $className();
+                        if (method_exists($Controller, $Action)) {
+                            $Controller->$Action(["data" => $data ?? []]);
+                        } else {
+                            $this->error = self::NOT_IMPLEMENTED;
+                        }
+                    } else {
+                        $this->error = self::NOT_FOUND;
+                    }
+                }
+            } else {
                 $this->error = self::NOT_FOUND;
             }
         } else {
