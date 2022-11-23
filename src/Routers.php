@@ -2,34 +2,20 @@
 
 namespace SmartPRO\Technology;
 
-/**
- *
- */
+
 class Routers
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     private array $routers;
-    /**
-     * @var string|mixed
-     */
+    /** @var string|mixed */
     private string $httpMethod;
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     private ?string $namespace;
-    /**
-     * @var string|mixed
-     */
+    /** @var string|mixed */
     private string $uri;
-    /**
-     * @var string
-     */
+    /** @var string */
     private string $group;
-    /**
-     * @var int|null
-     */
+    /** @var int|null */
     private ?int $error = null;
 
     protected ?array $route;
@@ -174,7 +160,7 @@ class Routers
      * @param string|null $namespace
      * @return void
      */
-    public function setNamespace(?string $namespace): void
+    public function namespace(?string $namespace): void
     {
         $this->namespace = $namespace;
     }

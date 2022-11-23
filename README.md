@@ -26,7 +26,7 @@ require "vendor/autoload.php";
 use SmartPRO\Technology\Routers;
 
 $router = new Routers();
-$router->setNamespace("App\Controllers");
+$router->namespace("App\Controllers");
 /*
  * ROTAS DO SITE
  */
