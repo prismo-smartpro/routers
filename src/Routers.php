@@ -94,6 +94,7 @@ class Routers
         }
         $this->routers[$method][$replaceName] = [
             "router" => $name,
+            "namespace" => $this->namespace,
             "method" => $method,
             "handler" => $Controller ?? null,
             "action" => $Action ?? null,
@@ -127,11 +128,11 @@ class Routers
                 } else {
                     $Action = $this->route['values']['action'] ?? null;
                     $data = array_combine($this->route['values']['data'], $this->route['results'][0]);
-                    $className = $this->namespace . $this->route['values']['handler'];
+                    $className = $this->route['values']['namespace'] . $this->route['values']['handler'];
                     if (class_exists($className)) {
                         $Controller = new $className();
                         if (method_exists($Controller, $Action)) {
-                            $Controller->$Action(["data" => $data ?? []]);
+                            $Controller->$Action($data ?? []);
                         } else {
                             $this->error = self::NOT_IMPLEMENTED;
                         }
@@ -151,9 +152,10 @@ class Routers
      * @param string $group
      * @return void
      */
-    public function group(string $group): void
+    public function group(string $group): Routers
     {
         $this->group = $group;
+        return $this;
     }
 
     /**

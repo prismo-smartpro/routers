@@ -4,3 +4,4 @@ index.php
 .htaccess
 src/App.php
 src/Client.php
+src/API/*
