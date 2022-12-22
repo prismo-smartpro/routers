@@ -110,6 +110,9 @@ class Routers
     {
         if (!empty($this->routers[$this->httpMethod])) {
             foreach ($this->routers[$this->httpMethod] as $key => $value) {
+                if($this->uri != "/"){
+                   $this->uri = rtrim($this->uri, "/");
+                }
                 preg_match_all($key, $this->uri, $results, PREG_SET_ORDER);
                 if (!empty($results)) {
                     unset($results[0][0]);
