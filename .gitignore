@@ -5,3 +5,4 @@ index.php
 src/App.php
 src/Client.php
 src/API/*
+.gitignore

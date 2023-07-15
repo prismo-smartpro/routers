@@ -120,7 +120,6 @@ class Routers
                         "results" => $results,
                         "values" => $value
                     ];
-                    break;
                 }
             }
 
