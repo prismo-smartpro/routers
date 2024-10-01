@@ -1,8 +1,7 @@
-vendor/*
-index.php
-.idea/*
+.idea
 .htaccess
-src/App.php
-src/Client.php
-src/API/*
-.gitignore
+vendor/
+composer.lock
+src/Controller.php
+index.php
+src/Middleware.php
