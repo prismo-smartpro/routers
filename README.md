@@ -24,27 +24,30 @@ RewriteRule ^(.*)$ index.php?route=/$1 [L,QSA]
 require "vendor/autoload.php";
 
 use SmartPRO\Technology\Routers;
+use SmartPRO\Technology\Middleware;
 
 $router = new Routers();
 $router->namespace("App\Controllers");
 /*
  * ROTAS DO SITE
  */
+$router->resetMiddlewares();
 $router->get("/", "Client:home");
-$router->get("/produto/{codigo}/{slug}", "Client:produto");
-$router->get("/categoria/{name}", "Client:categorias");
+$router->get("/product/{code}/{slug}", "Client:product");
+$router->get("/category/{name}", "Client:categories");
 /*
  * ROTAS DO ADMIN
  */
 $router->group("admin");
 $router->get("/", "App:home");
-$router->get("/usuarios", "App:usuarios");
-$router->get("/cadastrar", function () {
+$router->get("/users", "App:users");
+$router->get("/register", function () {
     //...
 });
 /*
  * ROTAS DE API DO ADMIN
  */
+$router->middleware([Middleware::class, "Auth"]);
 $router->group("admin/api");
 $router->post("/register", "App:register");
 /*
